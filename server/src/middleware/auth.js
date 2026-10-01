@@ -2,7 +2,7 @@ import pool from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
 import { verifyToken } from '../utils/tokens.js';
 
-async function requireAuth(req, res, next) {
+export async function requireAuth(req, res, next) {
   // 1. Read the header:  Authorization: Bearer <token>
   const [scheme, token] = (req.headers.authorization || '').split(' ');
   if (scheme !== 'Bearer' || !token) {
@@ -29,4 +29,7 @@ async function requireAuth(req, res, next) {
   next();
 }
 
-export default requireAuth;
+export async function optionalAuth(req, res, next) {
+  if (!req.headers.authorization) return next();
+  return requireAuth(req, res, next);
+}

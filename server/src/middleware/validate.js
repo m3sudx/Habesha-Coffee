@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, validationResult,param,header } from 'express-validator';
 import ApiError from '../utils/ApiError.js';
 
 
@@ -68,4 +68,27 @@ export const loginValidation = [
   body('password')
     .notEmpty().withMessage('Password is required')
     .isLength({ max: 72 }).withMessage('Password cannot exceed 72 characters'),
+];
+
+
+export const addCartItemValidation = [
+  body('variantId').isInt({ min: 1 }).withMessage('variantId must be a positive whole number').toInt(),
+  body('quantity').isInt({ min: 1, max: 20 }).withMessage('quantity must be between 1 and 20').toInt(),
+];
+
+
+const itemId = param('itemId')
+  .isInt({ min: 1, max: 2147483647 })
+  .withMessage('Invalid cart item id')
+  .toInt();
+
+export const itemIdValidation = [itemId];
+
+export const updateCartItemValidation = [
+  itemId,
+  body('quantity').isInt({ min: 1, max: 20 }).withMessage('quantity must be between 1 and 20').toInt(),
+];
+
+export const mergeCartValidation = [
+  header('x-cart-session').isUUID().withMessage('A valid X-Cart-Session header is required'),
 ];
