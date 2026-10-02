@@ -92,3 +92,27 @@ export const updateCartItemValidation = [
 export const mergeCartValidation = [
   header('x-cart-session').isUUID().withMessage('A valid X-Cart-Session header is required'),
 ];
+
+
+export const discountCodeValidation = [
+  body('code')
+    .trim()
+    .notEmpty().withMessage('Discount code is required')
+    .isLength({ max: 30 }).withMessage('Invalid discount code'),
+];
+
+
+export const checkoutValidation = [
+  body('shipping.name').trim().notEmpty().withMessage('Shipping name is required')
+    .isLength({ max: 100 }).withMessage('Shipping name is too long'),
+  body('shipping.phone').optional({ values: 'falsy' }).trim()
+    .isLength({ max: 30 }).withMessage('Phone number is too long'),
+  body('shipping.address').trim().notEmpty().withMessage('Shipping address is required')
+    .isLength({ max: 200 }).withMessage('Shipping address is too long'),
+  body('shipping.city').trim().notEmpty().withMessage('City is required')
+    .isLength({ max: 100 }).withMessage('City is too long'),
+  body('shipping.country').trim().notEmpty().withMessage('Country is required')
+    .isLength({ max: 100 }).withMessage('Country is too long'),
+  body('discountCode').optional({ values: 'falsy' }).trim()
+    .isLength({ max: 30 }).withMessage('Invalid discount code'),
+];
