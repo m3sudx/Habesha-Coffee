@@ -1,4 +1,4 @@
-import { body, validationResult,param,header } from 'express-validator';
+import { body, validationResult,param,header,matchedData } from 'express-validator';
 import ApiError from '../utils/ApiError.js';
 
 
@@ -115,4 +115,14 @@ export const checkoutValidation = [
     .isLength({ max: 100 }).withMessage('Country is too long'),
   body('discountCode').optional({ values: 'falsy' }).trim()
     .isLength({ max: 30 }).withMessage('Invalid discount code'),
+];
+
+
+export const orderIdValidation = [
+  param('id').isInt({ min: 1, max: 2147483647 }).withMessage('Invalid order id').toInt(),
+];
+
+export const ordersListValidation = [
+  query('page').optional().isInt({ min: 1 }).withMessage('page must be 1 or more').toInt(),
+  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('limit must be between 1 and 50').toInt(),
 ];
