@@ -1,4 +1,4 @@
-import { body, validationResult,param,header,matchedData } from 'express-validator';
+import { body, validationResult,param,header,query } from 'express-validator';
 import ApiError from '../utils/ApiError.js';
 
 
@@ -125,4 +125,17 @@ export const orderIdValidation = [
 export const ordersListValidation = [
   query('page').optional().isInt({ min: 1 }).withMessage('page must be 1 or more').toInt(),
   query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('limit must be between 1 and 50').toInt(),
+];
+
+
+export const adminOrdersValidation = [
+  query('status').optional().isIn(['pending', 'paid', 'shipped', 'delivered', 'cancelled']).withMessage('Invalid status'),
+  query('search').optional().trim().isLength({ max: 100 }).withMessage('Search text is too long'),
+  query('page').optional().isInt({ min: 1 }).withMessage('page must be 1 or more').toInt(),
+  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('limit must be between 1 and 50').toInt(),
+];
+
+export const orderStatusValidation = [
+  param('id').isInt({ min: 1, max: 2147483647 }).withMessage('Invalid order id').toInt(),
+  body('status').isIn(['shipped', 'delivered', 'cancelled']).withMessage('status must be shipped, delivered or cancelled'),
 ];

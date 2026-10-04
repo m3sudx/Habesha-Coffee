@@ -5,6 +5,7 @@ import productsRoute from './products.routes.js'
 import cartRoute from './cart.routes.js'
 import discountsRoute from './discounts.routes.js'
 import ordersRoute from './orders.routes.js'
+import adminRoute from './admin.routes.js'
 const mainRouter=express.Router()
  
 mainRouter.use('/auth',authRoute)
@@ -13,5 +14,6 @@ mainRouter.use('/products',productsRoute)
 mainRouter.use('/cart',cartRoute)
 mainRouter.use('/discounts', discountsRoute); 
 mainRouter.use('/orders', ordersRoute); 
+mainRouter.use('/admin', adminRoute);   
 
 export default mainRouter

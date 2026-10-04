@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {requireAuth} from '../middleware/auth.js';
-import { validate, checkoutValidation } from '../middleware/validate.js';
-import { startCheckout } from '../controllers/orders.controller.js';
+import { validate, checkoutValidation,ordersListValidation,orderIdValidation } from '../middleware/validate.js';
+import { startCheckout,listMyOrders,getMyOrder } from '../controllers/orders.controller.js';
 
 const ordersRoute = Router();
 
