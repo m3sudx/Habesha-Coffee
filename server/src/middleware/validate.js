@@ -139,3 +139,38 @@ export const orderStatusValidation = [
   param('id').isInt({ min: 1, max: 2147483647 }).withMessage('Invalid order id').toInt(),
   body('status').isIn(['shipped', 'delivered', 'cancelled']).withMessage('status must be shipped, delivered or cancelled'),
 ];
+
+
+
+// ---------- Admin: products ----------
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+const productId = param('id').isInt({ min: 1, max: 2147483647 }).withMessage('Invalid product id').toInt();
+
+// create: name and roast are required. update: every field is optional.
+const productBodyRules = (isCreate) => {
+  const required = (chain) => (isCreate ? chain : chain.optional());
+  return [
+    required(body('name')).trim().notEmpty().withMessage('Name is required')
+      .isLength({ min: 2, max: 100 }).withMessage('Name must be between 2 and 100 characters'),
+    body('slug').optional().trim().toLowerCase()
+      .matches(SLUG).withMessage('Slug can only contain lowercase letters, numbers and hyphens')
+      .isLength({ max: 120 }).withMessage('Slug is too long'),
+    body('description').optional().trim().isLength({ max: 2000 }).withMessage('Description is too long'),
+    body('origin').optional().trim().isLength({ max: 100 }).withMessage('Origin is too long'),
+    required(body('roast')).notEmpty().withMessage('Roast is required')
+      .isIn(['light', 'medium', 'dark']).withMessage('Roast must be light, medium or dark'),
+    body('tastingNotes').optional().trim().isLength({ max: 300 }).withMessage('Tasting notes are too long'),
+    body('categoryId').optional().isInt({ min: 1, max: 2147483647 }).withMessage('Invalid category id').toInt(),
+    body('isActive').optional().isBoolean().withMessage('isActive must be true or false').toBoolean(),
+  ];
+};
+
+export const productIdValidation = [productId];
+export const createProductValidation = productBodyRules(true);
+export const updateProductValidation = [productId, ...productBodyRules(false)];
+export const adminProductsListValidation = [
+  query('search').optional().trim().isLength({ max: 100 }).withMessage('Search text is too long'),
+  query('page').optional().isInt({ min: 1 }).withMessage('page must be 1 or more').toInt(),
+  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('limit must be between 1 and 50').toInt(),
+];
