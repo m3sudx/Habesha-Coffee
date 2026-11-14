@@ -124,4 +124,3 @@ Copy the signing secret it prints into `STRIPE_WEBHOOK_SECRET`.
 
 ## License
 
-MIT
