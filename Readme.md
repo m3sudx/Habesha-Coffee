@@ -3,7 +3,7 @@
 A full-stack e-commerce store for a fictional Ethiopian specialty coffee roaster. Customers browse beans, pick size and grind variants, check out with Stripe, and track orders. The shop owner manages products, orders and discount codes from an admin dashboard.
 
 
-<!-- Add a screenshot or GIF here: docs/screenshots/home.png -->
+<!--screenshot or GIF -->
 
 ## Features
 
@@ -25,7 +25,7 @@ A full-stack e-commerce store for a fictional Ethiopian specialty coffee roaster
 
 | Layer | Technology |
 | --- | --- |
-| Frontend | React (Vite), React Router, Tailwind CSS |
+| Frontend | typescript+Next.js, Tailwind CSS |
 | Backend | Node.js, Express |
 | Database | PostgreSQL |
 | Auth | JWT, bcrypt, role-based access (customer, admin) |
@@ -36,7 +36,7 @@ A full-stack e-commerce store for a fictional Ethiopian specialty coffee roaster
 
 ```
 habesha-coffee/
-  client/            React storefront and admin UI
+  client/            neext.js storefront and admin UI
   server/
     src/
       config/        env and database connection
@@ -49,8 +49,7 @@ habesha-coffee/
       app.js         Express app
       server.js      entry point
     uploads/         product images (git-ignored)
-  docs/
-    design/          Stitch design exports
+    docs/        
     logo/            logo files
     screenshots/
 ```
@@ -65,7 +64,7 @@ habesha-coffee/
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/<your-username>/habesha-coffee.git
+git clone https://github.com/<m3sudx>/habesha-coffee.git
 cd habesha-coffee
 
 cd server && npm install
@@ -73,11 +72,6 @@ cd ../client && npm install
 ```
 
 ### 2. Configure the environment
-
-```bash
-cd server
-cp .env.example .env
-```
 
 Fill in `DATABASE_URL`, `JWT_SECRET` and your Stripe keys.
 
@@ -96,7 +90,7 @@ npm run db:seed      # adds sample products
 cd server && npm run dev      # http://localhost:5000
 
 # terminal 2
-cd client && npm run dev      # http://localhost:5173
+cd client && npm run dev      # http://localhost:3000
 ```
 
 ### Stripe webhook (local)
@@ -117,7 +111,6 @@ Copy the signing secret it prints into `STRIPE_WEBHOOK_SECRET`.
 ## Roadmap
 
 - [ ] Phase 1: core store (auth, products, cart, checkout, admin orders)
-- [ ] Password reset and email verification
 - [ ] Saved addresses and order tracking page
 - [ ] Reviews and wishlist
 - [ ] Local payment gateway integration
