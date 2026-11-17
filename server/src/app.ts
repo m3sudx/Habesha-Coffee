@@ -4,10 +4,11 @@ import cors from "cors";
 import {errorHandler} from "./middleware/errorHandler.js";
 import apiRouter from "./router/index.js";
 import notFound from "./middleware/notFound.js";
+import { env } from "./config/env.js";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({origin:env.CLIENT_URL}));
 app.use(express.json());
 
 app.get("/health", (_req: Request, res: Response) => {
