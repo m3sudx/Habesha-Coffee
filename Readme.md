@@ -112,7 +112,7 @@ Copy the signing secret it prints into `STRIPE_WEBHOOK_SECRET`.
 
 - [ ] Phase 1: core store (auth, products, cart, checkout, admin orders)
 - [ ] Saved addresses and order tracking page
-- [ ] Reviews and wishlist
+- [ ] Reviews and wish list
 - [ ] Local payment gateway integration
 
 ## License

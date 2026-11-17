@@ -1,25 +1,6 @@
-import "dotenv/config";
-import express, { type NextFunction, type Request, type Response } from "express";
-import cors from "cors";
-import {errorHandler} from "./middleware/errorHandler.js";
-import apiRouter from "./router/index.js";
-import notFound from "./middleware/notFound.js";
+import app from "./app.js";
+import { env } from "node:process";
 
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.get("/health", (_req: Request, res: Response) => {
-  res.status(200).json({ success: true, message: "Working..." });
-});
-
-app.use("/api", apiRouter);
-app.use(notFound);
-app.use(errorHandler);
-
-const port = Number(process.env.PORT) || 5005;
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(env.PORT, () => {
+  console.log(`Server is running on port ${env.PORT}`);
 });
