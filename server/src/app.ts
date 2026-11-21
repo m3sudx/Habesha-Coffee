@@ -5,10 +5,12 @@ import {errorHandler} from "./middleware/errorHandler.js";
 import apiRouter from "./router/index.js";
 import notFound from "./middleware/notFound.js";
 import { env } from "./config/env.js";
+import { stripeWebhookHandler } from "./modules/payment/webhook.controller.js"
 
 const app = express();
-
 app.use(cors({origin:env.CLIENT_URL}));
+
+app.post("/api/webhooks/stripe", express.raw({ type: "application/json" }), stripeWebhookHandler);
 app.use(express.json());
 
 app.get("/health", (_req: Request, res: Response) => {

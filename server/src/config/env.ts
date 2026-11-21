@@ -10,8 +10,8 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default("7d"),
 
   // Optional for now; make them required when you reach the Stripe phase.
-  STRIPE_SECRET_KEY: z.string().optional(),
-  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+STRIPE_SECRET_KEY: z.string().min(1, "STRIPE_SECRET_KEY is required"),
+STRIPE_WEBHOOK_SECRET: z.string().min(1, "STRIPE_WEBHOOK_SECRET is required"),
 });
 
 const parsed = envSchema.safeParse(process.env);
