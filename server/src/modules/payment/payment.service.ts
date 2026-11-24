@@ -1,9 +1,10 @@
 import type Stripe from "stripe";
 import { pool } from "../../config/db.js";
 import { stripe } from "../../config/stripe.js";
+import { sendOrderConfirmation } from "../email/email.service.js";
 
 type Outcome =
-  | { kind: "paid" }
+  | { kind: "paid"; orderId: string }
   | { kind: "ignored" }
   | { kind: "out_of_stock"; orderId: string };
 
@@ -26,6 +27,12 @@ export async function handleCheckoutCompleted(session: Stripe.Checkout.Session):
   if (outcome.kind === "out_of_stock") {
     await cancelAndRefund(session, outcome.orderId);
   }
+  if (outcome.kind === "paid") {
+  // Not awaited: a mail problem must never fail the webhook or the payment.
+  sendOrderConfirmation(outcome.orderId).catch((err) =>
+    console.error(`Order ${outcome.orderId}: confirmation email failed`, err),
+  );
+}
 }
 
 async function markOrderPaid(stripeSessionId: string): Promise<Outcome> {
@@ -103,7 +110,7 @@ async function markOrderPaid(stripeSessionId: string): Promise<Outcome> {
     }
 
     await client.query("COMMIT");
-    return { kind: "paid" };
+    return { kind: "paid", orderId: order.id };
   } catch (err) {
     await client.query("ROLLBACK");
     throw err;
