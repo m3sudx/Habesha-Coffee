@@ -15,3 +15,17 @@ export const checkoutSchema = z.object({
 });
 
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
+
+// Query-string values arrive as strings, so numbers use z.coerce.
+export const orderListQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(50).default(10),
+});
+
+export type OrderListQuery = z.infer<typeof orderListQuerySchema>;
+
+export const orderIdParamsSchema = z.object({
+  id: z.string().uuid("Invalid order id"),
+});
+
+export type OrderIdParams = z.infer<typeof orderIdParamsSchema>;
