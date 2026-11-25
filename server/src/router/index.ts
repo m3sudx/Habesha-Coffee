@@ -7,6 +7,7 @@ import orderRouter from '../modules/order/order.route.js'
 import adminOrderRoutes from "../modules/admin/admin-order.route.js";
 import adminProductRoutes from "../modules/admin/admin-product.route.js";
 import adminDiscountRoutes from "../modules/admin/admin-discount.route.js";
+import adminStatsRoutes from "../modules/admin/admin-stats.route.js";
 const router=Router()
 
 router.use('/auth',authRouter)
@@ -17,5 +18,6 @@ router.use('/orders', orderRouter)
 router.use("/admin/orders", adminOrderRoutes);
 router.use("/admin/products", adminProductRoutes);
 router.use("/admin/discounts", adminDiscountRoutes);
+router.use("/admin/stats", adminStatsRoutes);
 
 export default router 
