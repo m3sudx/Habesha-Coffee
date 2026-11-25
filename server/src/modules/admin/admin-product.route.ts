@@ -19,7 +19,8 @@ import {
   updateProductHandler,
   updateVariantHandler,
 } from "./admin-product.controller.js";
-
+import { uploadProductImage } from "../../middleware/uploadImage.js";
+import { removeImageHandler, uploadImageHandler } from "./admin-product-image.controller.js";
 const router = Router();
 
 // Every route in this file is admin only: no token gives 401, a customer gives 403.
@@ -48,5 +49,13 @@ router.patch(
   validate(updateVariantSchema),
   updateVariantHandler,
 );
+
+router.post(
+  "/:id/image",
+  validate(productIdParamsSchema, "params"),
+  uploadProductImage,
+  uploadImageHandler,
+);
+router.delete("/:id/image", validate(productIdParamsSchema, "params"), removeImageHandler);
 
 export default router;
