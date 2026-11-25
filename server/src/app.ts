@@ -6,9 +6,20 @@ import apiRouter from "./router/index.js";
 import notFound from "./middleware/notFound.js";
 import { env } from "./config/env.js";
 import { stripeWebhookHandler } from "./modules/payment/webhook.controller.js"
+import { UPLOADS_DIR } from "./config/uploads.js";
+
 
 const app = express();
 app.use(cors({origin:env.CLIENT_URL}));
+
+app.use(
+  "/uploads",
+  express.static(UPLOADS_DIR, {
+    maxAge: "7d",
+    immutable: true, // file names are unique (uuid), so a cached file never changes
+    setHeaders: (res) => res.setHeader("X-Content-Type-Options", "nosniff"),
+  }),
+);
 
 app.post("/api/webhooks/stripe", express.raw({ type: "application/json" }), stripeWebhookHandler);
 app.use(express.json());
