@@ -5,6 +5,7 @@ import cartRouter from '../modules/cart/cart.route.js'
 import discountRouter from '../modules/discount/discount.route.js'
 import orderRouter from '../modules/order/order.route.js'
 import adminOrderRoutes from "../modules/admin/admin-order.route.js";
+import adminProductRoutes from "../modules/admin/admin-product.route.js";
 const router=Router()
 
 router.use('/auth',authRouter)
@@ -13,5 +14,6 @@ router.use('/cart', cartRouter)
 router.use('/discounts', discountRouter)
 router.use('/orders', orderRouter)
 router.use("/admin/orders", adminOrderRoutes);
+router.use("/admin/products", adminProductRoutes);
 
 export default router 
