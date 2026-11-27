@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* Brand colors. Use them as bg-forest, text-brown, border-sand-dark, etc. */
+@theme {
+  --color-forest: #1f3b2d;
+  --color-forest-light: #2d5240;
+  --color-cream: #f6efe2;
+  --color-sand: #eadcc6;
+  --color-sand-dark: #dccbaa;
+  --color-brown: #5a3e2b;
+  --color-gold: #c79a4b;
+  --color-terracotta: #b5683f;
+}
+
+/* Fonts are loaded in layout.tsx with next/font; these map them to font-sans / font-serif. */
+@theme inline {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif text-forest;
+  }
+
+  /* Visible keyboard focus everywhere */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-forest;
+  }
+}
