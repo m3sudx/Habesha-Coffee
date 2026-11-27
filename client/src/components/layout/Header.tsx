@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { ShoppingCart } from "lucide-react";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -49,10 +50,7 @@ export function Header() {
               aria-label="Cart"
               className="relative flex h-11 w-11 items-center justify-center rounded-full bg-forest text-cream hover:bg-forest-light"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M6 8h12l-1 12H7L6 8z" />
-                <path d="M9 8V6a3 3 0 0 1 6 0v2" />
-              </svg>
+              <ShoppingCart size={20} aria-hidden="true" />
               {/* The real count comes from the cart in F3 */}
               <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-bold text-forest">
                 0
@@ -65,7 +63,7 @@ export function Header() {
                 aria-label="Menu"
                 className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-full border-2 border-forest text-forest [&::-webkit-details-marker]:hidden"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M4 7h16M4 12h16M4 17h16" />
                 </svg>
               </summary>
