@@ -26,6 +26,7 @@ type CartContextValue = {
   removeItem: (variantId: string) => Promise<void>;
   applyDiscount: (code: string) => Promise<void>;
   removeDiscount: () => void;
+  refresh: () => Promise<void>; // reload the cart from the server
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -191,6 +192,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setDiscount(null);
   }, []);
 
+  // Used after a payment, when the server has emptied the cart.
+  const refresh = useCallback(async () => {
+    try {
+      const sessionId = readStored(SESSION_KEY);
+      if (!token && !sessionId) return;
+      const res = await cartApi.getCart({ token, sessionId });
+      await apply(res.data);
+    } catch {
+      // keep what is shown
+    }
+  }, [token, apply]);
+
   const value = useMemo<CartContextValue>(
     () => ({
       cart,
@@ -202,8 +215,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       removeItem,
       applyDiscount,
       removeDiscount,
+      refresh,
     }),
-    [cart, ready, discount, addItem, setQuantity, removeItem, applyDiscount, removeDiscount],
+    [cart, ready, discount, addItem, setQuantity, removeItem, applyDiscount, removeDiscount, refresh],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
