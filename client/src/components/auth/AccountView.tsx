@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
+import Link from "next/link";
+import { LogOut, Package } from "lucide-react";
 import { useAuth } from "@/features/auth/AuthProvider";
-import { btnOutline } from "@/components/ui/styles";
+import { btnOutline, btnPrimary } from "@/components/ui/styles";
 
 export function AccountView() {
   const { user, logout } = useAuth();
@@ -30,13 +31,25 @@ export function AccountView() {
         </div>
       </dl>
 
+      <div className="mt-8 flex flex-wrap gap-4">
+        <Link href="/account/orders" className={btnPrimary}>
+          <Package size={16} aria-hidden="true" />
+          My orders
+        </Link>
+        {user.role === "admin" && (
+          <Link href="/admin" className={btnOutline}>
+            Admin dashboard
+          </Link>
+        )}
+      </div>
+
       <button
         type="button"
         onClick={() => {
           logout();
           router.push("/");
         }}
-        className={`${btnOutline} mt-8`}
+        className={`${btnOutline} mt-4`}
       >
         <LogOut size={16} aria-hidden="true" />
         Log out
