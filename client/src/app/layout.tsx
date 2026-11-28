@@ -5,6 +5,7 @@ import { AuthProvider } from "@/features/auth/AuthProvider";
 import { CartProvider } from "@/features/cart/CartProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SITE_URL } from "@/lib/site";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -19,11 +20,18 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Habesha Coffee",
     template: "%s | Habesha Coffee",
   },
   description: "Specialty Ethiopian coffee, roasted fresh and shipped to your door.",
+  openGraph: {
+    type: "website",
+    siteName: "Habesha Coffee",
+    title: "Habesha Coffee",
+    description: "Specialty Ethiopian coffee, roasted fresh and shipped to your door.",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

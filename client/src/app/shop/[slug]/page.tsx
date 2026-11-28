@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ApiError } from "@/lib/api/client";
@@ -19,7 +20,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProductPage({ params }: Props) {
+// The page itself only wraps the content in Suspense: params is a Promise in this version of
+// Next.js, and reading it outside Suspense blocks the instant navigation.
+export default function ProductPage({ params }: Props) {
+  return (
+    <Suspense fallback={<ProductSkeleton />}>
+      <ProductContent params={params} />
+    </Suspense>
+  );
+}
+
+function ProductSkeleton() {
+  return (
+    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6" aria-busy="true">
+      <div className="mb-8 h-5 w-64 animate-pulse rounded-full bg-sand" />
+      <div className="grid gap-10 md:grid-cols-2">
+        <div className="aspect-square animate-pulse rounded-3xl bg-sand" />
+        <div className="flex flex-col gap-4">
+          <div className="h-12 w-3/4 animate-pulse rounded-full bg-sand" />
+          <div className="h-24 animate-pulse rounded-2xl bg-sand" />
+          <div className="h-40 animate-pulse rounded-2xl bg-sand" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+async function ProductContent({ params }: Props) {
   const { slug } = await params;
 
   let product;
