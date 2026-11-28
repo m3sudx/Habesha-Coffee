@@ -27,7 +27,16 @@ const COLUMNS = [
   },
 ];
 
-export function Footer() {
+// "use cache" lets the year be computed once and reused, which Cache Components requires
+// for anything that depends on the current date.
+async function getYear() {
+  "use cache";
+  return new Date().getFullYear();
+}
+
+export async function Footer() {
+  const year = await getYear();
+
   return (
     <footer className="bg-forest text-cream">
       <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_repeat(3,1fr)]">
@@ -56,7 +65,7 @@ export function Footer() {
 
       <div className="border-t border-forest-light">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5 text-sm text-sand sm:px-6">
-          <span>© {new Date().getFullYear()} Habesha Coffee. All rights reserved.</span>
+          <span>© {year} Habesha Coffee. All rights reserved.</span>
           <span className="flex gap-4">
             <Link href="/privacy" className="hover:text-gold">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-gold">Terms of Service</Link>

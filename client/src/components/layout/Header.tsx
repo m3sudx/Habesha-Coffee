@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { Menu, ShoppingBag } from "lucide-react";
 import { Logo } from "./Logo";
-import { ShoppingCart } from "lucide-react";
+import { AccountNav } from "./AccountNav";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -33,52 +34,40 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/login"
-              className="hidden px-3 py-2 text-sm font-medium text-forest hover:text-terracotta sm:block"
-            >
-              Log In
-            </Link>
-            <Link
-              href="/register"
-              className="hidden rounded-full border-2 border-forest px-5 py-2 text-sm font-semibold text-forest hover:bg-forest hover:text-cream sm:block"
-            >
-              Sign Up
-            </Link>
+            <AccountNav variant="desktop" />
+
             <Link
               href="/cart"
               aria-label="Cart"
               className="relative flex h-11 w-11 items-center justify-center rounded-full bg-forest text-cream hover:bg-forest-light"
             >
-              <ShoppingCart size={20} aria-hidden="true" />
+              <ShoppingBag size={20} aria-hidden="true" />
               {/* The real count comes from the cart in F3 */}
               <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-bold text-forest">
                 0
               </span>
             </Link>
 
-            {/* Mobile menu: no JavaScript needed */}
+            {/* Mobile menu: no JavaScript needed for the open/close */}
             <details className="relative md:hidden">
               <summary
                 aria-label="Menu"
                 className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-full border-2 border-forest text-forest [&::-webkit-details-marker]:hidden"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M4 7h16M4 12h16M4 17h16" />
-                </svg>
+                <Menu size={20} aria-hidden="true" />
               </summary>
               <div className="absolute right-0 z-20 mt-2 w-52 rounded-2xl border border-sand-dark bg-cream p-2 shadow-lg">
-                {[...NAV, { href: "/login", label: "Log In" }, { href: "/register", label: "Sign Up" }].map(
-                  (item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block rounded-xl px-4 py-3 text-sm font-medium text-forest hover:bg-sand"
-                    >
-                      {item.label}
-                    </Link>
-                  ),
-                )}
+                {NAV.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block rounded-xl px-4 py-3 text-sm font-medium text-forest hover:bg-sand"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <div className="my-1 border-t border-sand-dark" />
+                <AccountNav variant="mobile" />
               </div>
             </details>
           </div>
