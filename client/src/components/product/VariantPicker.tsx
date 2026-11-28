@@ -1,9 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import Link from "next/link";
+import { Check, Minus, Plus, ShoppingCart } from "lucide-react";
 import type { Variant } from "@/lib/types";
+import { ApiError } from "@/lib/api/client";
 import { formatGrind, formatPrice, formatSize } from "@/lib/format";
+import { useCart } from "@/features/cart/CartProvider";
 import { btnPrimary } from "@/components/ui/styles";
 
 const MAX_QTY = 10;
@@ -17,12 +20,17 @@ function pill(active: boolean) {
 }
 
 export function VariantPicker({ variants }: { variants: Variant[] }) {
+  const { addItem } = useCart();
+
   // Start on the first variant that is in stock (or the first one at all).
   const initial = variants.find((v) => v.inStock) ?? variants[0];
 
   const [sizeGrams, setSizeGrams] = useState(initial?.sizeGrams);
   const [grind, setGrind] = useState(initial?.grind);
   const [qty, setQty] = useState(1);
+  const [adding, setAdding] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const sizes = useMemo(
     () => [...new Set(variants.map((v) => v.sizeGrams))].sort((a, b) => a - b),
@@ -31,11 +39,33 @@ export function VariantPicker({ variants }: { variants: Variant[] }) {
   const grinds = variants.filter((v) => v.sizeGrams === sizeGrams);
   const selected = variants.find((v) => v.sizeGrams === sizeGrams && v.grind === grind);
 
+  // Any change to the choices clears the last message.
+  function resetMessages() {
+    setAdded(false);
+    setError(null);
+  }
+
   function chooseSize(size: number) {
+    resetMessages();
     setSizeGrams(size);
     // Keep the same grind if this size has it, otherwise use the first one available.
     const forSize = variants.filter((v) => v.sizeGrams === size);
     if (!forSize.some((v) => v.grind === grind)) setGrind(forSize[0]?.grind);
+  }
+
+  async function handleAdd() {
+    if (!selected) return;
+    resetMessages();
+    setAdding(true);
+    try {
+      await addItem(selected.id, qty);
+      setAdded(true);
+    } catch (err) {
+      // For example "Only 2 left in stock"
+      setError(err instanceof ApiError ? err.message : "Could not add to cart. Please try again.");
+    } finally {
+      setAdding(false);
+    }
   }
 
   if (!initial) {
@@ -82,7 +112,10 @@ export function VariantPicker({ variants }: { variants: Variant[] }) {
               key={v.id}
               type="button"
               aria-pressed={v.grind === grind}
-              onClick={() => setGrind(v.grind)}
+              onClick={() => {
+                resetMessages();
+                setGrind(v.grind);
+              }}
               className={pill(v.grind === grind)}
             >
               {formatGrind(v.grind)}
@@ -96,7 +129,10 @@ export function VariantPicker({ variants }: { variants: Variant[] }) {
           <button
             type="button"
             aria-label="Decrease quantity"
-            onClick={() => setQty((q) => Math.max(1, q - 1))}
+            onClick={() => {
+              resetMessages();
+              setQty((q) => Math.max(1, q - 1));
+            }}
             className="flex h-11 w-11 items-center justify-center text-forest"
           >
             <Minus size={16} aria-hidden="true" />
@@ -107,18 +143,43 @@ export function VariantPicker({ variants }: { variants: Variant[] }) {
           <button
             type="button"
             aria-label="Increase quantity"
-            onClick={() => setQty((q) => Math.min(MAX_QTY, q + 1))}
+            onClick={() => {
+              resetMessages();
+              setQty((q) => Math.min(MAX_QTY, q + 1));
+            }}
             className="flex h-11 w-11 items-center justify-center text-forest"
           >
             <Plus size={16} aria-hidden="true" />
           </button>
         </div>
 
-        {/* Wired to the cart in F3 (variant id: selected?.id, quantity: qty) */}
-        <button type="button" disabled={!selected?.inStock} className={`${btnPrimary} flex-1 py-3.5`}>
+        <button
+          type="button"
+          onClick={handleAdd}
+          disabled={!selected?.inStock || adding}
+          className={`${btnPrimary} flex-1 py-3.5`}
+        >
           <ShoppingCart size={18} aria-hidden="true" />
-          Add to Cart
+          {adding ? "Adding..." : "Add to Cart"}
         </button>
+      </div>
+
+      {/* Result of the last add, announced to screen readers too */}
+      <div aria-live="polite" className="min-h-6">
+        {added && (
+          <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-forest-light">
+            <Check size={16} aria-hidden="true" />
+            Added to your cart.
+            <Link href="/cart" className="font-semibold text-forest underline">
+              View cart
+            </Link>
+          </p>
+        )}
+        {error && (
+          <p role="alert" className="text-sm font-medium text-terracotta">
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Menu, ShoppingBag } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Logo } from "./Logo";
 import { AccountNav } from "./AccountNav";
+import { CartLink } from "./CartLink";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -35,18 +36,7 @@ export function Header() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             <AccountNav variant="desktop" />
-
-            <Link
-              href="/cart"
-              aria-label="Cart"
-              className="relative flex h-11 w-11 items-center justify-center rounded-full bg-forest text-cream hover:bg-forest-light"
-            >
-              <ShoppingBag size={20} aria-hidden="true" />
-              {/* The real count comes from the cart in F3 */}
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-bold text-forest">
-                0
-              </span>
-            </Link>
+            <CartLink />
 
             {/* Mobile menu: no JavaScript needed for the open/close */}
             <details className="relative md:hidden">
